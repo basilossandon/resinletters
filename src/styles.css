@@ -16,7 +16,6 @@ body,
 
 body {
   overscroll-behavior-y: none;
-  background: #f5f5f5;
   font-family: 'Inter var', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -38,6 +37,5 @@ svg {
 }
 
 body {
-  /* background: #252525;
-  background: linear-gradient(15deg, #0a0a0a 0%, #444 100%); */
+  /* background: linear-gradient(15deg, #0a0a0a 0%, #444 100%); */
 }

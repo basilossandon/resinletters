@@ -65,19 +65,13 @@ export function App() {
 
 
       <PresentationControls
-        global={true}
-        cursor={true}
-        snap={{ mass: 4, tension: 500 }} // the problematic part. Snap-back to center (can also be a spring config)
-        speed={1}
-        zoom={1}
+        global
+        config={{ mass: 2, tension: 500 }}
+        snap={{ mass: 4, tension: 1500 }}
         rotation={[0.4, 0.2, 0]}
-        polar={[0, Math.PI / 2]}
-        azimuth={[-Infinity, Infinity]}
-        config={{ mass: 1, tension: 170, friction: 26 }}
+        polar={[-Math.PI / 3, Math.PI / 3]}
+        azimuth={[-Math.PI / 1.4, Math.PI / 2]}
       >
-
-        {/* <color attach="background" args={['#f2f2f5']} /> */}
-        {/** The text and the grid */}
         <Text config={config} rotation={[0, 0, 0]} position={[0, -1, 2.25]}>
           {text}
         </Text>
@@ -105,7 +99,6 @@ export function App() {
           position={[0, -1.01, 0]}>
           <RandomizedLight amount={4} radius={10} ambient={0.5} intensity={1} position={[0, 10, -10]} size={15} mapSize={1024} bias={0.0001} />
         </AccumulativeShadows>
-        {/* <Rig /> */}
       </PresentationControls>
 
 
@@ -134,7 +127,6 @@ function Text({ children, config, font = '/Mikiyu Font -Honey Candy-_Regular.jso
     state.scene.background = oldBg
     state.gl.setRenderTarget(null)
     ref.current.visible = true
-    const t = state.clock.getElapsedTime()
   })
 
 
