@@ -5,6 +5,9 @@ import { useFBO, Center, Text3D, Instance, Instances, Environment, Lightformer, 
 import { useControls, button } from 'leva'
 import { MeshRefractionMaterial } from './shaders/MeshRefractionMaterial'
 
+import { useState, useEffect } from 'react';
+
+
 
 function Rig() {
   const camera = useThree((state) => state.camera)
@@ -36,8 +39,16 @@ export function App() {
     })
   })
 
+  let flipRotation = false;
+
+  let zoomLevel = window.innerWidth / 25;
+  console.log(window.innerWidth)
+
+
   return (
-    <Canvas shadows orthographic camera={{ position: [10, 20, 20], zoom: 40 }} gl={{ preserveDrawingBuffer: true }}>
+    <Canvas shadows orthographic camera={{ position: [10, 20, 20], zoom: zoomLevel }} gl={{ preserveDrawingBuffer: true }}>
+
+
       {/* <color attach="background" args={['#f2f2f5']} /> */}
       {/** The text and the grid */}
       <Text config={config} rotation={[0, 0, 0]} position={[0, -1, 2.25]}>
@@ -48,8 +59,8 @@ export function App() {
         autoRotate={autoRotate}
         autoRotateSpeed={0.3}
         zoomSpeed={1}
-        minZoom={40}
-        maxZoom={40}
+        minZoom={zoomLevel}
+        maxZoom={zoomLevel}
         enablePan={false}
         dampingFactor={0.05}
         minPolarAngle={Math.PI / 3}
@@ -105,7 +116,9 @@ function Text({ children, config, font = '/Mikiyu Font -Honey Candy-_Regular.jso
     state.scene.background = oldBg
     state.gl.setRenderTarget(null)
     ref.current.visible = true
+    const t = state.clock.getElapsedTime()
   })
+
 
 
   return (
@@ -134,6 +147,10 @@ function Text({ children, config, font = '/Mikiyu Font -Honey Candy-_Regular.jso
       {/** Double up the text as a flat layer at the bottom for more interesting refraction */}
       <Center scale={[0.8, 1, 1]} front top {...props}>
         <Text3D font={font} scale={5} letterSpacing={-0.03} height={0.01} curveSegments={32}>
+          {children}
+          <meshBasicMaterial color={config.gColor} />
+        </Text3D>
+        <Text3D font={font} scale={5} letterSpacing={-0.03} height={-0.01} curveSegments={32}>
           {children}
           <meshBasicMaterial color={config.gColor} />
         </Text3D>
