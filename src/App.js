@@ -46,7 +46,10 @@ export function App() {
 
 
   return (
-    <Canvas shadows orthographic camera={{ position: [0, 0, 20], zoom: zoomLevel }} gl={{ preserveDrawingBuffer: true }}>
+    <Canvas
+      style={{ touchAction: 'none' }}
+
+      shadows orthographic camera={{ position: [0, 0, 20], zoom: zoomLevel }} gl={{ preserveDrawingBuffer: true }}>
       {/** Controls */}
       {/* <OrbitControls
         autoRotate={autoRotate}
@@ -62,17 +65,15 @@ export function App() {
 
 
       <PresentationControls
-        enabled={true} // the controls can be disabled by setting this to false
-        global={true} // Spin globally or by dragging the model
-        cursor={true} // Whether to toggle cursor style on drag
-        snap={false} // Snap-back to center (can also be a spring config)
-        speed={1} // Speed factor
-        zoom={1} // Zoom factor when half the polar-max is reached
-        rotation={[0, 0, 0]} // Default rotation
-        polar={[0, Math.PI / 2]} // Vertical limits
-        azimuth={[-Infinity, Infinity]} // Horizontal limits
-        config={{ mass: 1, tension: 170, friction: 26 }} // Spring config
-
+        global={true}
+        cursor={true}
+        snap={{ mass: 4, tension: 500 }} // the problematic part. Snap-back to center (can also be a spring config)
+        speed={1}
+        zoom={1}
+        rotation={[0.4, 0.2, 0]}
+        polar={[0, Math.PI / 2]}
+        azimuth={[-Infinity, Infinity]}
+        config={{ mass: 1, tension: 170, friction: 26 }}
       >
 
         {/* <color attach="background" args={['#f2f2f5']} /> */}
