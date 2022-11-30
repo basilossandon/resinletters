@@ -1,13 +1,21 @@
 import { useRef } from 'react'
 import { RGBELoader } from 'three-stdlib'
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber'
 import { useFBO, Center, Text3D, Instance, Instances, Environment, Lightformer, OrbitControls, RandomizedLight, AccumulativeShadows } from '@react-three/drei'
 import { useControls, button } from 'leva'
 import { MeshRefractionMaterial } from './shaders/MeshRefractionMaterial'
 
+
+function Rig() {
+  const camera = useThree((state) => state.camera)
+  return useFrame((state) => {
+    camera.position.z = Math.sin(state.clock.elapsedTime) * 20
+  })
+}
+
 export function App() {
   const { autoRotate, text, shadow, ...config } = useControls({
-    text: 'MIAUMIAU',
+    text: 'ニャーニャー',
     clearcoat: { value: 1, min: 0.1, max: 1 },
     clearcoatRoughness: { value: 0.25, min: 0, max: 1 },
     uRefractPower: { value: 0.35, min: 0, max: 5 },
@@ -18,7 +26,7 @@ export function App() {
     uColor: '#e26686',
     gColor: '#ff7a7a',
     shadow: '#80446c',
-    autoRotate: false,
+    autoRotate: true,
     screenshot: button(() => {
       // Save the canvas as a *.png
       const link = document.createElement('a')
@@ -27,20 +35,21 @@ export function App() {
       link.click()
     })
   })
+
   return (
-    <Canvas shadows orthographic camera={{ position: [10, 20, 20], zoom: 80 }} gl={{ preserveDrawingBuffer: true }}>
-      <color attach="background" args={['#f2f2f5']} />
+    <Canvas shadows orthographic camera={{ position: [10, 20, 20], zoom: 40 }} gl={{ preserveDrawingBuffer: true }}>
+      {/* <color attach="background" args={['#f2f2f5']} /> */}
       {/** The text and the grid */}
-      <Text config={config} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 2.25]}>
+      <Text config={config} rotation={[0, 0, 0]} position={[0, -1, 2.25]}>
         {text}
       </Text>
       {/** Controls */}
       <OrbitControls
         autoRotate={autoRotate}
-        autoRotateSpeed={-0.1}
-        zoomSpeed={0.25}
+        autoRotateSpeed={0.3}
+        zoomSpeed={1}
         minZoom={40}
-        maxZoom={140}
+        maxZoom={40}
         enablePan={false}
         dampingFactor={0.05}
         minPolarAngle={Math.PI / 3}
@@ -69,28 +78,13 @@ export function App() {
         position={[0, -1.01, 0]}>
         <RandomizedLight amount={4} radius={10} ambient={0.5} intensity={1} position={[0, 10, -10]} size={15} mapSize={1024} bias={0.0001} />
       </AccumulativeShadows>
+      {/* <Rig /> */}
+
     </Canvas>
   )
 }
 
-const Grid = ({ number = 23, lineWidth = 0.026, height = 0.5 }) => (
-  // Renders a grid and crosses as instances
-  <Instances position={[0, -1.02, 0]}>
-    <planeGeometry args={[lineWidth, height]} />
-    <meshBasicMaterial color="#999" />
-    {Array.from({ length: number }, (_, y) =>
-      Array.from({ length: number }, (_, x) => (
-        <group key={x + ':' + y} position={[x * 2 - Math.floor(number / 2) * 2, -0.01, y * 2 - Math.floor(number / 2) * 2]}>
-          <Instance rotation={[-Math.PI / 2, 0, 0]} />
-          <Instance rotation={[-Math.PI / 2, 0, Math.PI / 2]} />
-        </group>
-      ))
-    )}
-    <gridHelper args={[100, 100, '#bbb', '#bbb']} position={[0, -0.01, 0]} />
-  </Instances>
-)
-
-function Text({ children, config, font = '/Inter_Medium_Regular.json', ...props }) {
+function Text({ children, config, font = '/Mikiyu Font -Honey Candy-_Regular.json', ...props }) {
   const ref = useRef()
   const fbo = useFBO(1024)
   const texture = useLoader(RGBELoader, 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/aerodynamics_workshop_1k.hdr')
@@ -113,8 +107,10 @@ function Text({ children, config, font = '/Inter_Medium_Regular.json', ...props 
     ref.current.visible = true
   })
 
+
   return (
     <>
+
       <group ref={ref}>
         <Center scale={[0.8, 1, 1]} front top {...props}>
           <Text3D
@@ -133,7 +129,7 @@ function Text({ children, config, font = '/Inter_Medium_Regular.json', ...props 
             <MeshRefractionMaterial uSceneTex={fbo.texture} {...config} />
           </Text3D>
         </Center>
-        <Grid />
+        {/* <Grid /> */}
       </group>
       {/** Double up the text as a flat layer at the bottom for more interesting refraction */}
       <Center scale={[0.8, 1, 1]} front top {...props}>
