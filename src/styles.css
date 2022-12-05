@@ -12,6 +12,8 @@ body,
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: unset !important;
+  background: unset !important;
 }
 
 body {
@@ -34,9 +36,4 @@ a {
 
 svg {
   fill: black;
-}
-
-body {
-  background-color: unset !important;
-  background: unset !important;
 }
