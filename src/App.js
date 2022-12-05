@@ -42,11 +42,6 @@ export function App() {
   let flipRotation = false;
 
   let zoomLevel = window.innerWidth / 25;
-  console.log(window.innerWidth)
-
-  var iframe = document.getElementsByTagName('iframe')[0];
-  iframe.style.background = 'white';
-  iframe.contentWindow.document.body.style.backgroundColor = 'unset!important';
 
   return (
     <Canvas
