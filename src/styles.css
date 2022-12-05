@@ -37,5 +37,5 @@ svg {
 }
 
 body {
-  /* background: linear-gradient(15deg, #0a0a0a 0%, #444 100%); */
+  background-color: unset !important;
 }
